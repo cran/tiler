@@ -2,6 +2,7 @@
 knitr::opts_chunk$set(
   collapse = TRUE, comment = "#>", message = FALSE, error = FALSE, tidy = TRUE
 )
+tmpfiles <- list.files(tempdir(), full.names = TRUE) # any pre-existing temp files
 
 ## ----ex1-----------------------------------------------------------------
 library(tiler)
@@ -72,4 +73,16 @@ tile(map, tile_dir, "0-3")
 
 ## ----unlink7, echo=FALSE-------------------------------------------------
 unlink(tile_dir, recursive = TRUE, force = TRUE)
+
+## ----ex8, eval=FALSE-----------------------------------------------------
+#  tile_viewer("project/tiles", "3-7") # geographic tiles
+#  tile_viewer("project/tiles", "3-7", width = 1000, height = 1000) # non-geographic tiles
+
+## ----ex9, eval=FALSE-----------------------------------------------------
+#  view_tiles("project/tiles")
+
+## ----cleanup, echo=FALSE-------------------------------------------------
+# supplemental check for excess temp files
+extrafiles <- setdiff(list.files(tempdir(), full.names = TRUE), tmpfiles)
+if(length(extrafiles)) unlink(extrafiles, recursive = TRUE, force = TRUE)
 
