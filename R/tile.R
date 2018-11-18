@@ -89,7 +89,11 @@ tile <- function(file, tiles, zoom, crs = NULL, format = c("xyz", "tms"), resume
   if(.Platform$OS.type == "windows"){
     if(ex != "python") ex <- paste0("\"", ex, "\"")
     bat <- tiler_options()$osgeo4w
-    if(bat != "") ex <- paste0("\"", bat, "\" ", ex)
+    if(bat != "OSGeo4W.bat"){
+      ex <- paste0("\"", bat, "\" ", ex)
+    } else {
+      ex <- paste(bat, ex)
+    }
   }
   dir.create(tiles, showWarnings = FALSE, recursive = TRUE)
   projected <- .proj_check(file, crs, ...)

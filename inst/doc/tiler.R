@@ -2,6 +2,7 @@
 knitr::opts_chunk$set(
   collapse = TRUE, comment = "#>", message = FALSE, error = FALSE, tidy = TRUE
 )
+set.seed(1)
 tmpfiles <- list.files(tempdir(), full.names = TRUE) # any pre-existing temp files
 
 ## ----ex1-----------------------------------------------------------------
@@ -73,6 +74,28 @@ tile(map, tile_dir, "0-3")
 
 ## ----unlink7, echo=FALSE-------------------------------------------------
 unlink(tile_dir, recursive = TRUE, force = TRUE)
+
+## ----map1_tiles, eval=FALSE----------------------------------------------
+#  file <- system.file("maps/map_wgs84.tif", package = "tiler")
+#  tile(file, "tiles", "0-7")
+
+## ----map1----------------------------------------------------------------
+library(leaflet)
+tiles <- "https://leonawicz.github.io/tiles/us48lr/tiles/{z}/{x}/{y}.png"
+leaflet(
+  options = leafletOptions(minZoom = 0, maxZoom = 7), width = "100%") %>% 
+  addProviderTiles("Stamen.Toner") %>% 
+  addTiles(tiles, options = tileOptions(opacity = 0.8)) %>% setView(-100, 40, 3)
+
+## ----map2_tiles, eval=FALSE----------------------------------------------
+#  tile("st2.png", "tiles", "0-7")
+
+## ----map2----------------------------------------------------------------
+tiles <- "https://leonawicz.github.io/tiles/st2/tiles/{z}/{x}/{y}.png"
+leaflet(
+  options = leafletOptions(
+    crs = leafletCRS("L.CRS.Simple"), minZoom = 0, maxZoom = 7, attributionControl = FALSE), width = "100%") %>% 
+  addTiles(tiles) %>% setView(71, -60, 3)
 
 ## ----ex8, eval=FALSE-----------------------------------------------------
 #  tile_viewer("project/tiles", "3-7") # geographic tiles

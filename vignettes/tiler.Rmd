@@ -11,6 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE, comment = "#>", message = FALSE, error = FALSE, tidy = TRUE
 )
+set.seed(1)
 tmpfiles <- list.files(tempdir(), full.names = TRUE) # any pre-existing temp files
 ```
 
@@ -22,9 +23,9 @@ In addition to generating map tiles based on a common raster layer source, it al
 
 Python is required as well as the `gdal` library for Python. For Windows users, this is not the same as simply having `rgdal` installed through R. You need to install `gdal` so that it is accessible by Python. One of the easiest and typically recommended ways to do this in Windows is to install [OSGeo4W](https://trac.osgeo.org/osgeo4w/). It will bring all the required Python `gdal` library functionality along with it. OSGeo4W is also commonly installed along with [QGIS](https://qgis.org/en/site/forusers/download.html).
 
-On Windows for potential user convenience, the `tiler` package will perform a single check on package load for the `OSgeo4W.bat` utility at `C:/Program Files/QGIS 3.0/OSGeo4W.bat`. If found, its path is set in `tiler_options`. If it is not found at this precise location, the path remains unspecified and `tiler` will fall back on only calling Python during tiling operations, assuming hopefully that `gdal` will be available to Python nonetheless.
+On Windows, `tiler_options` is set on package load with `osgeo4w = "OSgeo4W.bat"`. Make sure to add the path to this file to your system path variable. Otherwise it will not be found when calling `tile`. You can set the full path to `OSGeo4W.bat` directly in your R session with `tiler_options`. However, it is recommended to add the directory (e.g. `C:/OSGeo64` or wherever `OSGeo4W.bat` is located) to your system path so that you never had to deal with it in R.
 
-You should not rely on a gratuitous check like this; `tiler` is being overly generous. It is recommended that you simply add the paths for `python.exe`, and `OSGeo4.bat` if applicable, to your system path after installation. This way you do not need to provide these paths to `tiler_options` in each R session; R will know where they are just like on other operating systems. That's all that should be needed. Linux and Mac users should not have to do any additional setup as long as Python and `gdal` for Python are installed.
+Linux and Mac users should not have to do any additional setup as long as Python and `gdal` for Python are installed and available.
 
 ## Geographic map tiles
 
@@ -189,6 +190,44 @@ Map tiles must be served online to be of much use. Serving map tiles is not the 
 if you store your tiles in a folder named `tiles` in a repository named `maptiles` for example.
 
 Here are some [examples of non-geographic tile sets](https://github.com/leonawicz/tiles/) hosted on GitHub using Star Trek galaxy maps generated with `tiler` and here they are used in [Leaflet maps](https://leonawicz.github.io/rtrek/articles/sc.html).
+
+### Leaflet examples using remotely hosted tiles
+
+The following two examples use Leaflet to display interactive maps. The maps use remotely hosted map tiles that were created with `tiler`.
+
+Geographic provider tiles based on the low resolution example map included in `tiler` of the 48 contiguous US states. These map tiles were originally generated with the following code
+
+```{r map1_tiles, eval=FALSE}
+file <- system.file("maps/map_wgs84.tif", package = "tiler")
+tile(file, "tiles", "0-7")
+```
+
+and are hosted [here](https://github.com/leonawicz/tiles/tree/master/us48lr).
+
+```{r map1}
+library(leaflet)
+tiles <- "https://leonawicz.github.io/tiles/us48lr/tiles/{z}/{x}/{y}.png"
+leaflet(
+  options = leafletOptions(minZoom = 0, maxZoom = 7), width = "100%") %>% 
+  addProviderTiles("Stamen.Toner") %>% 
+  addTiles(tiles, options = tileOptions(opacity = 0.8)) %>% setView(-100, 40, 3)
+```
+
+Non-geographic provider tiles based on a Star Trek fictional galaxy map. These map tiles were generated with
+
+```{r map2_tiles, eval=FALSE}
+tile("st2.png", "tiles", "0-7")
+``` 
+
+and are hosted [here](https://github.com/leonawicz/tiles/tree/master/st2), including the source file `st2.png`.
+
+```{r map2}
+tiles <- "https://leonawicz.github.io/tiles/st2/tiles/{z}/{x}/{y}.png"
+leaflet(
+  options = leafletOptions(
+    crs = leafletCRS("L.CRS.Simple"), minZoom = 0, maxZoom = 7, attributionControl = FALSE), width = "100%") %>% 
+  addTiles(tiles) %>% setView(71, -60, 3)
+```
 
 ### Local preview
 
