@@ -1,5 +1,5 @@
 Package: tiler
-Version: 0.2.3
+Version: 0.2.4
 Title: Create Geographic and Non-Geographic Map Tiles
 Description: Creates geographic map tiles from geospatial map files or non-geographic map tiles from simple image files. 
     This package provides a tile generator function for creating map tile sets for use with packages such as 'leaflet'. 
@@ -23,8 +23,8 @@ Imports: sp, rgdal, raster, png
 VignetteBuilder: knitr
 RoxygenNote: 7.0.0
 NeedsCompilation: no
-Packaged: 2019-11-22 15:37:39 UTC; Matt
+Packaged: 2019-11-26 15:14:31 UTC; Matt
 Author: Matthew Leonawicz [aut, cre] (<https://orcid.org/0000-0001-9452-2771>)
 Maintainer: Matthew Leonawicz <matt_leonawicz@esource.com>
 Repository: CRAN
-Date/Publication: 2019-11-22 16:00:02 UTC
+Date/Publication: 2019-11-26 22:30:02 UTC

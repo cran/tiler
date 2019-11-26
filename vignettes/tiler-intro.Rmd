@@ -7,13 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE, comment = "#>", message = FALSE, error = FALSE
-)
-set.seed(1)
-tmpfiles <- list.files(tempdir(), full.names = TRUE) # any pre-existing temp files
-```
+
 
 The `tiler` package provides a map tile-generator function for creating map tile sets for use with packages such as `leaflet`.
 
@@ -41,22 +35,41 @@ Lastly, consider the power of your system before attempting to make a ton of til
 
 Map tiles are generated with `tile`. `tile` takes an input file name `file` for the source map and a `tiles` destination path for where to save map tiles. The only other required argument is `zoom`, the range of zoom levels for the tiles. This is a string of the form, e.g. `3:7`. In this and the subsequent examples zoom levels 0-3 are used.
 
-```{r ex1}
+
+```r
 library(tiler)
 library(raster)
 tile_dir <- file.path(tempdir(), "tiles")
 map <- system.file("maps/map_wgs84.tif", package = "tiler")
 (r <- raster(map))
+#> class      : RasterLayer 
+#> dimensions : 32, 71, 2272  (nrow, ncol, ncell)
+#> resolution : 0.8333333, 0.8333333  (x, y)
+#> extent     : -125.0208, -65.85417, 23.27083, 49.9375  (xmin, xmax, ymin, ymax)
+#> crs        : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#> source     : C:/github/tiler/inst/maps/map_wgs84.tif 
+#> names      : map_wgs84 
+#> values     : -0.7205295, 5.545086  (min, max)
 plot(r)
+```
+
+![plot of chunk ex1](vignette-ex1-1.png)
+
+```r
 
 tile(map, tile_dir, "0-3")
+#> Coloring raster...
+#> Preparing for tiling...
+#> [1] "C:\\Users\\Matt\\AppData\\Local\\Temp\\RtmpQLDRP8"
+#> Creating tiles. Please wait...
+#> Creating tile viewer...
+#> Complete.
 
 list.files(tile_dir)
+#> [1] "0"                   "1"                   "2"                   "3"                   "doc.kml"             "tilemapresource.xml"
 ```
 
-```{r unlink1, echo=FALSE}
-unlink(tile_dir, recursive = TRUE, force = TRUE)
-```
+
 
 Listing the files in `tile_dir` shows the top level map tiles directories, 0-3 as expected. This is not printed in subsequent examples since it is not going to change.
 
@@ -66,17 +79,36 @@ Note that these examples rendered to HTML here do not capture the parts of the l
 
 The previous example used a map with a geospatial coordinate reference system (CRS) but it was not projected. That map would be ready to view with the `leaflet` package for example, as would the tiles generated based on it. The next example uses a similar map that is projected. In order to generate map tiles that can be used with `leaflet` in the standard CRS, the map must be reprojected first. Then the same map tiles are generated as before.
 
-```{r ex2}
+
+```r
 map <- system.file("maps/map_albers.tif", package = "tiler")
 (r <- raster(map))
+#> class      : RasterLayer 
+#> dimensions : 32, 71, 2272  (nrow, ncol, ncell)
+#> resolution : 85011.74, 103363.8  (x, y)
+#> extent     : -2976297, 3059536, -1577300, 1730342  (xmin, xmax, ymin, ymax)
+#> crs        : +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+#> source     : C:/github/tiler/inst/maps/map_albers.tif 
+#> names      : map_albers 
+#> values     : -0.593978, 5.544724  (min, max)
 plot(r)
+```
+
+![plot of chunk ex2](vignette-ex2-1.png)
+
+```r
 
 tile(map, tile_dir, "0-3")
+#> Reprojecting raster...
+#> Coloring raster...
+#> Preparing for tiling...
+#> [1] "C:\\Users\\Matt\\AppData\\Local\\Temp\\RtmpQLDRP8"
+#> Creating tiles. Please wait...
+#> Creating tile viewer...
+#> Complete.
 ```
 
-```{r unlink2, echo=FALSE}
-unlink(tile_dir, recursive = TRUE, force = TRUE)
-```
+
 
 The tiles generated this time are the same as before, that is, ready for `leaflet`. `tile` reprojects the raster layer internally. This can be seen in the log output printed to the console.
 
@@ -84,28 +116,53 @@ The tiles generated this time are the same as before, that is, ready for `leafle
 
 If the CRS of the raster is `NA`, there are two options. By default, `tile` will fall back on processing the raster layer as if it were a simple image file with no geospatial projection information (see the next section on simple CRS/non-geographic map tiles). These tiles are not the same as the previous sets.
 
-```{r ex3}
+
+```r
 map <- system.file("maps/map_albers_NA.tif", package = "tiler")
 (r <- raster(map))
+#> class      : RasterLayer 
+#> dimensions : 32, 71, 2272  (nrow, ncol, ncell)
+#> resolution : 85011.74, 103363.8  (x, y)
+#> extent     : -2976297, 3059536, -1577300, 1730342  (xmin, xmax, ymin, ymax)
+#> crs        : NA 
+#> source     : C:/github/tiler/inst/maps/map_albers_NA.tif 
+#> names      : map_albers_NA 
+#> values     : -0.593978, 5.544724  (min, max)
 plot(r)
+```
+
+![plot of chunk ex3](vignette-ex3-1.png)
+
+```r
 
 tile(map, tile_dir, "0-3")
+#> Warning in .proj_check(file, crs, ...): Projection expected but is missing. Continuing as non-geographic image.
+#> Coloring raster...
+#> Preparing for tiling...
+#> [1] "C:\\Users\\Matt\\AppData\\Local\\Temp\\RtmpQLDRP8"
+#> Creating tiles. Please wait...
+#> Creating tile viewer...
+#> Complete.
 ```
 
-```{r unlink3, echo=FALSE}
-unlink(tile_dir, recursive = TRUE, force = TRUE)
-```
+
 
 This is not likely what is wanted. The other option is to force set a known CRS if it is missing from the file or was dropped for whatever reason. Now reprojection can proceed and the expected tiles are generated.
 
-```{r ex4}
+
+```r
 crs <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs +towgs84=0,0,0"
 tile(map, tile_dir, "0-3", crs)
+#> Reprojecting raster...
+#> Coloring raster...
+#> Preparing for tiling...
+#> [1] "C:\\Users\\Matt\\AppData\\Local\\Temp\\RtmpQLDRP8"
+#> Creating tiles. Please wait...
+#> Creating tile viewer...
+#> Complete.
 ```
 
-```{r unlink4, echo=FALSE}
-unlink(tile_dir, recursive = TRUE, force = TRUE)
-```
+
 
 A note on reprojection: Depending on the nature of the data in a raster, the `...` argument to `tile` allows you to pass through the `method` argument to `raster::projectRaster`. This is `bilinear` by default for bilinear interpolation, appropriate for continuous data. It can be set to `ngb` for nearest neighbor, appropriate for discrete or categorical data. If more control is needed over the reprojection, you should just prepare your raster file first before using `tile`. `tiler` is not intended to substitute for or wrap general geospatial processing tasks that can easily be done with other packages.
 
@@ -113,36 +170,60 @@ A note on reprojection: Depending on the nature of the data in a raster, the `..
 
 Being able to change the default color palette or specify color breaks is important. All other optional `...` arguments to `tile` are passed to `raster::RGB` to provide control over the creation of an intermediary RGB raster. Most arguments to `RGB` can usually be ignored. The most useful ones are `col` and `colNA` for the data values color palette and the `noData` color, respectively. Coloring tiles differently for the original example is as simple as the following.
 
-```{r ex5}
+
+```r
 map <- system.file("maps/map_wgs84.tif", package = "tiler")
 pal <- colorRampPalette(c("darkblue", "lightblue"))(20)
 nodata <- "tomato"
 tile(map, tile_dir, "0-3", col = pal, colNA = nodata)
+#> Coloring raster...
+#> Preparing for tiling...
+#> [1] "C:\\Users\\Matt\\AppData\\Local\\Temp\\RtmpQLDRP8"
+#> Creating tiles. Please wait...
+#> Creating tile viewer...
+#> Complete.
 ```
 
-```{r unlink5, echo=FALSE}
-unlink(tile_dir, recursive = TRUE, force = TRUE)
-```
+
 
 ### RGB and RGBA rasters
 
 Multi-band rasters are supported as long as they have three or four layers, in which case `tile` assumes these represent red, green, blue and alpha channel, respectively. Internally, single-layer raster files are colored and converted to a three- or four-band RGB/A raster object prior to tile generation. If `file` is already such a raster, this step is simply skipped. Optional arguments like data and `noData` color, break points, etc., are ignored since this type of raster contains its own color information.
 
-```{r ex6}
+
+```r
 map <- system.file("maps/map_albers_rgb.tif", package = "tiler")
 (r <- brick(map))
+#> class      : RasterBrick 
+#> dimensions : 32, 71, 2272, 3  (nrow, ncol, ncell, nlayers)
+#> resolution : 85011.74, 103363.8  (x, y)
+#> extent     : -2976297, 3059536, -1577300, 1730342  (xmin, xmax, ymin, ymax)
+#> crs        : +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs 
+#> source     : C:/github/tiler/inst/maps/map_albers_rgb.tif 
+#> names      : map_albers_rgb.1, map_albers_rgb.2, map_albers_rgb.3 
+#> min values :                0,                0,                0 
+#> max values :              253,              255,              244
 plot(r)
+```
+
+![plot of chunk ex6](vignette-ex6-1.png)
+
+```r
 
 tile(map, tile_dir, "0-3")
+#> Reprojecting raster...
+#> Preparing for tiling...
+#> [1] "C:\\Users\\Matt\\AppData\\Local\\Temp\\RtmpQLDRP8"
+#> Creating tiles. Please wait...
+#> Creating tile viewer...
+#> Complete.
 ```
 
-```{r unlink6, echo=FALSE}
-unlink(tile_dir, recursive = TRUE, force = TRUE)
-```
+
 
 ## Non-geographic map tiles
 
-Almost all map tiles you encounter are for geographic maps. They have a geographic coordinate reference system (CRS). Software used to display these map tiles, such as Leaflet, is similarly focused on these kinds of map tiles. Everything is geared towards the dominant use case involving geospatial coordinate systems. 
+Almost all map tiles you encounter are for geographic maps. They have a geographic coordinate reference system (CRS). Software used to display these map tiles, such as Leaflet, is similarly focused on these kinds of map tiles. Everything is geared towards the dominant use case involving geospatial coordinate systems.
 
 However, there are edge cases where non-geographic maps are required. These can be maps of outer space, game board maps, etc. The base map used to generate map tiles is usually a simple image like a `png`, `jpg` or `bmp` file. The coordinate reference system is a simple Cartesian coordinate system based on the matrix of pixels or grid cells that represent the image.
 
@@ -152,16 +233,24 @@ There is no longitude or latitude or more complex geospatial projection associat
 
 One example was shown previously where a spatial map lacking critical spatial reference information was processed as a simple image. In the example below, this is the intent. Here, the map is a `png` file. It is a previously saved plot of the Albers-projected US map used in the earlier projected geotiff example. You can see it has a color key legend. As a simple image, all of this will be tiled.
 
-```{r ex7}
+
+```r
 map <- system.file("maps/map.png", package = "tiler")
 plotRGB(brick(map))
+```
+
+![plot of chunk ex7](vignette-ex7-1.png)
+
+```r
 
 tile(map, tile_dir, "0-3")
+#> [1] "C:\\Users\\Matt\\AppData\\Local\\Temp\\RtmpQLDRP8"
+#> Creating tiles. Please wait...
+#> Creating tile viewer...
+#> Complete.
 ```
 
-```{r unlink7, echo=FALSE}
-unlink(tile_dir, recursive = TRUE, force = TRUE)
-```
+
 
 The `tile` function will automatically process simple image files differently. There is no concept of projection, and coloring tiles is irrelevant because the image file has its own coloring already. Map tiles generated from regular image files can be used with `leaflet` if done properly. The generated tiles have a simple CRS that is based on the pixel dimensions of the image file. If you were to use these tiles in `leaflet` for example and you wanted to overlay map markers, you would have to first georeference your locations of interest based on the matrix rows and columns of the image. This is outside the scope of `tiler`. See the Leaflet JS and `leaflet` package documentation for details on using simple CRS/non-geographic tiles.
 
@@ -197,35 +286,39 @@ The following two examples use Leaflet to display interactive maps. The maps use
 
 Geographic provider tiles based on the low resolution example map included in `tiler` of the 48 contiguous US states. These map tiles were originally generated with the following code
 
-```{r map1_tiles, eval=FALSE}
+
+```r
 file <- system.file("maps/map_wgs84.tif", package = "tiler")
 tile(file, "tiles", "0-7")
 ```
 
 and are hosted [here](https://github.com/leonawicz/tiles/tree/master/us48lr).
 
-```{r map1}
+
+```r
 library(leaflet)
 tiles <- "https://leonawicz.github.io/tiles/us48lr/tiles/{z}/{x}/{y}.png"
 leaflet(
-  options = leafletOptions(minZoom = 0, maxZoom = 7), width = "100%") %>% 
-  addProviderTiles("Stamen.Toner") %>% 
+  options = leafletOptions(minZoom = 0, maxZoom = 7), width = "100%") %>%
+  addProviderTiles("Stamen.Toner") %>%
   addTiles(tiles, options = tileOptions(opacity = 0.8)) %>% setView(-100, 40, 3)
 ```
 
 Non-geographic provider tiles based on a Star Trek fictional galaxy map. These map tiles were generated with
 
-```{r map2_tiles, eval=FALSE}
+
+```r
 tile("st2.png", "tiles", "0-7")
-``` 
+```
 
 and are hosted [here](https://github.com/leonawicz/tiles/tree/master/st2), including the source file `st2.png`.
 
-```{r map2}
+
+```r
 tiles <- "https://leonawicz.github.io/tiles/st2/tiles/{z}/{x}/{y}.png"
 leaflet(
   options = leafletOptions(
-    crs = leafletCRS("L.CRS.Simple"), minZoom = 0, maxZoom = 7, attributionControl = FALSE), width = "100%") %>% 
+    crs = leafletCRS("L.CRS.Simple"), minZoom = 0, maxZoom = 7, attributionControl = FALSE), width = "100%") %>%
   addTiles(tiles) %>% setView(71, -60, 3)
 ```
 
@@ -237,14 +330,16 @@ By default `tile` also creates `preview.html` as noted above. This can also be c
 
 If you have tiles in a directory `"project/tiles"`, creating `preview.html` directly can be done as follows. The arguments shown are just for illustration.
 
-```{r ex8, eval=FALSE}
+
+```r
 tile_viewer("project/tiles", "3-7") # geographic tiles
 tile_viewer("project/tiles", "3-7", width = 1000, height = 1000) # non-geographic tiles
 ```
 
 However the tile preview document is created, it can be viewed by passing the same `tiles` directory to `view_tiles`.
 
-```{r ex9, eval=FALSE}
+
+```r
 view_tiles("project/tiles")
 ```
 
@@ -252,9 +347,4 @@ view_tiles("project/tiles")
 
 The `leaflet` R code needed in order to use custom non-geographic tiles like these requires setting `leafletOptions(crs = leafletCRS("L.CRS.Simple"))` as well as calling `addTiles(urlTemplate = url)` where `url` is like the example URL shown above. Setting the focus of the map can be a bit tricky for non-geographic map tiles based on an arbitrary image file. It may take some trial and error to get a sense for the custom coordinate system.
 
-```{r cleanup, echo=FALSE}
-# supplemental check for excess temp files
-extrafiles <- setdiff(list.files(tempdir(), full.names = TRUE),
-                      c(tmpfiles, list.files(tempdir(), "\\.js$", full.names = TRUE)))
-if(length(extrafiles)) unlink(extrafiles, recursive = TRUE, force = TRUE)
-```
+
