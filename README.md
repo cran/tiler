@@ -4,12 +4,13 @@
 # tiler <img src="man/figures/logo.png" style="margin-left:10px;margin-bottom:5px;" width="120" align="right">
 
 **Author:** [Matthew Leonawicz](https://github.com/leonawicz)
-<a href="https://orcid.org/0000-0001-9452-2771" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" height="16"></a>
+<a href="https://orcid.org/0000-0001-9452-2771" target="orcid.widget">
+<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>
 <br/> **License:** [MIT](https://opensource.org/licenses/MIT)<br/>
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
-developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
 [![Travis build
 status](https://travis-ci.org/ropensci/tiler.svg?branch=master)](https://travis-ci.org/ropensci/tiler)
 [![AppVeyor Build
@@ -17,7 +18,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/ropensci/tiler?branch
 [![Codecov test
 coverage](https://codecov.io/gh/ropensci/tiler/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/tiler?branch=master)
 
-[![](https://badges.ropensci.org/226_status.svg)](https://github.com/ropensci/onboarding/issues/226)
+[![](https://badges.ropensci.org/226_status.svg)](https://github.com/ropensci/software-review/issues/226)
 [![CRAN
 status](http://www.r-pkg.org/badges/version/tiler)](https://cran.r-project.org/package=tiler)
 [![CRAN RStudio mirror
@@ -95,8 +96,9 @@ the package vignette for more information.
 
 -----
 
-Please note that this project is released with a [Contributor Code of
+Please note that the `tiler` project is released with a [Contributor
+Code of
 Conduct](https://github.com/ropensci/tiler/blob/master/CODE_OF_CONDUCT.md).
-By participating in this project you agree to abide by its terms.
+By contributing to this project, you agree to abide by its terms.
 
 [![ropensci\_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
