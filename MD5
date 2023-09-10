@@ -1,10 +1,10 @@
-8d5cb82164ca202dc2e80269bda1279b *DESCRIPTION
+3dabb4dff7e35fac0ac2f8ca8ae0835b *DESCRIPTION
 4e5cb40b14f9f1ff7e0bc56881b9f5bf *LICENSE
 272398e81b559ab1c5254f00a10045ba *NAMESPACE
-42b80ec60ce776b2c128fde3be7c14de *NEWS.md
+aa9c953d33b30751b898a18ac43df603 *NEWS.md
 625f15a8ae0a2a02cbc00284e13ea012 *R/options.R
 948d7280f7260157474ecb1c9c5f9a9f *R/tile.R
-642bb9d54e14b6f92189451d974ed5ba *R/tiler.R
+fa1ed351810cf8761da9607aca7fcedd *R/tiler.R
 1fb27dbe99acf5c5ff804286d00f417a *R/viewer.R
 1d86fc733259d7128878eba4e76e85e4 *R/zzz.R
 50622a25853c964c637de7a268208835 *README.md
@@ -38,7 +38,7 @@ a8b516da9c003761d3c1c1e443aa2fb6 *inst/maps/map_wgs84_NA.tif
 ae8644b5c221814f9301c35830e4ea8b *man/figures/logo.png
 b9f3fe0140896c9ac2b4bac5fe2e8e03 *man/tile.Rd
 9309a16f800682a600e4d5bd46f04dcc *man/tile_viewer.Rd
-80dc38c416a9e7c99bde554a0b2a4e43 *man/tiler.Rd
+cbe9ad415c444ff587ead9c043c49337 *man/tiler.Rd
 1f7ff4bd813ed4dbbb95b0b3c8486da5 *man/tiler_options.Rd
 9eef5ba1b3ea1357fcf585ce496c32f6 *man/view_tiles.Rd
 725d533d135eaf5a6cb886c857a3d792 *tests/testthat.R
