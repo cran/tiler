@@ -1,8 +1,8 @@
 Package: tiler
 Title: Create Geographic and Non-Geographic Map Tiles
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(
-    person("Matthew", "Leonawicz", email = "mfleonawicz@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9452-2771")),
+    person("Matthew", "Leonawicz", email = "rpkgs@pm.me", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9452-2771")),
     person("Alex M", "Chubaty", email = "achubaty@for-cast.ca", role = "ctb", comment = c(ORCID = "0000-0001-7146-8135"))
     )
 Description: Creates geographic map tiles from geospatial map files or 
@@ -28,14 +28,14 @@ Suggests: bmp, jpeg, knitr, leaflet, parallel, rmarkdown, sf, testthat,
 VignetteBuilder: knitr
 ByteCompile: true
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 SystemRequirements: Python (>= 2.7), python-gdal library (For Windows,
         gdal installed via OSGeo4W <https://trac.osgeo.org/osgeo4w/>
         recommended) clipboard
 NeedsCompilation: no
-Packaged: 2023-09-10 02:24:45 UTC; Matt
+Packaged: 2024-09-11 21:26:27 UTC; Matt
 Author: Matthew Leonawicz [aut, cre] (<https://orcid.org/0000-0001-9452-2771>),
   Alex M Chubaty [ctb] (<https://orcid.org/0000-0001-7146-8135>)
-Maintainer: Matthew Leonawicz <mfleonawicz@gmail.com>
+Maintainer: Matthew Leonawicz <rpkgs@pm.me>
 Repository: CRAN
-Date/Publication: 2023-09-10 03:10:02 UTC
+Date/Publication: 2024-09-11 23:00:01 UTC
